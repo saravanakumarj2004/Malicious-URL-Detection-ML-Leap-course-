@@ -1,0 +1,21 @@
+# Python virtual environments - never commit these
+venv/
+venv312/
+env/
+.env/
+__pycache__/
+*.pyc
+*.pyo
+
+# Dataset CSV (too large - not needed for serving)
+benign_vs_defacement_urls.csv
+
+# IDE / OS files
+.vscode/
+.idea/
+*.DS_Store
+Thumbs.db
+
+# Editor temp files
+*.swp
+*.swo

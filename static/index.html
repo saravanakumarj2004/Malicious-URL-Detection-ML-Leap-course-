@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DefendURL | Malicious URL Detection AI</title>
+    <meta name="description" content="AI powered malicious URL Detection system. Check if a website is safe instantly.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <div class="background-effects">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="glass-nav">
+        <div class="logo">
+            <span class="logo-icon">🛡️</span>
+            <span class="logo-text">DefendURL</span>
+        </div>
+        <div class="nav-links">
+            <a href="#welcome" class="nav-item active" onclick="switchTab('welcome')">Home</a>
+            <a href="#detection" class="nav-item btn-primary btn-nav" onclick="switchTab('detection')">Scan URL</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Welcome Section -->
+        <section id="welcome" class="content-section active-section">
+            <div class="hero-content">
+                <div class="badge">🚀 Powered by Deep Learning AI</div>
+                <h1 class="hero-title">
+                    Stay Protected from<br>
+                    <span class="text-gradient">Malicious Domains</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Our AI model has analyzed thousands of malicious and benign URLs to detect phishing, defacement, and
+                    harmful websites with high accuracy.
+                </p>
+                <div class="hero-actions">
+                    <button class="btn-primary btn-large" onclick="switchTab('detection')">
+                        Start Scanning Now
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </button>
+                    <a href="/how-it-works" class="btn-secondary btn-large">How It Works</a>
+                </div>
+
+                <div class="stats-row" id="how-it-works">
+                    <div class="stat-card glass-card">
+                        <div class="stat-icon">🧠</div>
+                        <h3>Deep Learning</h3>
+                        <p>Utilizes a 1D Convolutional Neural Network (Conv1D) to detect patterns in URL characters.</p>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <div class="stat-icon">⚡</div>
+                        <h3>Real-time</h3>
+                        <p>Get classification results and confidence scores instantly via our FastAPI backend.</p>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <div class="stat-icon">🛡️</div>
+                        <h3>High Accuracy</h3>
+                        <p>Distinguishes benign activity from malicious acts like visual website defacement.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Detection Section -->
+        <section id="detection" class="content-section">
+            <div class="detection-container glass-card">
+                <div class="detection-header">
+                    <h2>URL Security Scanner</h2>
+                    <p>Enter any URL below to analyze it against our threat intelligence model.</p>
+                </div>
+
+                <form id="scan-form" class="scan-form">
+                    <div class="input-group">
+                        <div class="input-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                            </svg>
+                        </div>
+                        <input type="url" id="url-input" placeholder="https://example.com" required autocomplete="off">
+                        <button type="submit" class="btn-primary btn-scan" id="scan-btn">
+                            <span class="btn-text">Analyze</span>
+                            <div class="spinner hidden" id="spinner"></div>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Result Container (Hidden until scanned) -->
+                <div id="result-container" class="result-container hidden">
+                    <div class="result-card" id="result-card">
+                        <div class="result-icon-container">
+                            <div class="result-icon" id="result-icon"></div>
+                        </div>
+                        <div class="result-details">
+                            <h3 id="result-status">Analyzing...</h3>
+                            <p class="scanned-url" id="scanned-url-display"></p>
+
+                            <div class="confidence-meter">
+                                <div class="meter-header">
+                                    <span>AI Confidence level</span>
+                                    <span id="confidence-percentage">0%</span>
+                                </div>
+                                <div class="meter-track">
+                                    <div class="meter-fill" id="meter-fill"></div>
+                                </div>
+                            </div>
+
+                            <p class="result-description" id="result-description"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="/js/app.js"></script>
+</body>
+
+</html>

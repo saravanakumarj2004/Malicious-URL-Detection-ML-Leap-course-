@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How It Works | DefendURL</title>
+    <meta name="description"
+        content="A deep technical explanation of how the DefendURL malicious URL detection AI model works.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+        .hiw-page {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 120px 2rem 4rem;
+        }
+
+        .hiw-hero {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .hiw-hero h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 1rem;
+        }
+
+        .hiw-hero p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .pipeline {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .pipeline-step {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            flex-shrink: 0;
+            box-shadow: 0 4px 20px rgba(79, 70, 229, 0.4);
+        }
+
+        .step-connector {
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary), transparent);
+            height: 40px;
+            margin-left: 27px;
+            margin-top: -10px;
+            margin-bottom: -10px;
+        }
+
+        .step-content {
+            flex-grow: 1;
+            padding-bottom: 1rem;
+        }
+
+        .step-content h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-content p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .arch-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .arch-card.glass-card {
+            padding: 1.8rem;
+        }
+
+        .arch-card h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .arch-card pre {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: #a5b4fc;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid var(--glass-border);
+            line-height: 1.6;
+        }
+
+        .arch-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .model-viz {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .model-viz h2 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .layer-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+        }
+
+        .layer-box {
+            width: 100%;
+            max-width: 500px;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            border: 1px solid;
+        }
+
+        .layer-arrow {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin: 0.25rem 0;
+        }
+
+        .layer-embed {
+            background: rgba(79, 70, 229, 0.15);
+            border-color: rgba(79, 70, 229, 0.4);
+            color: #a5b4fc;
+        }
+
+        .layer-conv {
+            background: rgba(139, 92, 246, 0.15);
+            border-color: rgba(139, 92, 246, 0.4);
+            color: #c4b5fd;
+        }
+
+        .layer-pool {
+            background: rgba(6, 182, 212, 0.15);
+            border-color: rgba(6, 182, 212, 0.4);
+            color: #67e8f9;
+        }
+
+        .layer-dense {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.4);
+            color: #6ee7b7;
+        }
+
+        .layer-drop {
+            background: rgba(245, 158, 11, 0.15);
+            border-color: rgba(245, 158, 11, 0.4);
+            color: #fcd34d;
+        }
+
+        .layer-out {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.4);
+            color: #fca5a5;
+        }
+
+        .section-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            background: rgba(79, 70, 229, 0.15);
+            color: #a5b4fc;
+            border: 1px solid rgba(79, 70, 229, 0.3);
+            margin: 0.2rem;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            transition: color 0.3s;
+        }
+
+        .back-btn:hover {
+            color: var(--text-main);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background-effects">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <nav class="glass-nav">
+        <div class="logo">
+            <span class="logo-icon">🛡️</span>
+            <span class="logo-text">DefendURL</span>
+        </div>
+        <div class="nav-links">
+            <a href="/" class="nav-item">Home</a>
+            <a href="/#detection" class="nav-item btn-primary btn-nav"
+                onclick="sessionStorage.setItem('tab','detection')">Scan URL</a>
+        </div>
+    </nav>
+
+    <div class="hiw-page">
+        <a href="/" class="back-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Back to Home
+        </a>
+
+        <div class="hiw-hero">
+            <div class="badge">🔬 Technical Deep Dive</div>
+            <h1>How <span class="text-gradient">DefendURL</span> Works</h1>
+            <p>A full technical walkthrough of the deep learning architecture, data pipeline, and the web infrastructure
+                powering the URL threat detection system.</p>
+        </div>
+
+        <!-- Pipeline -->
+        <h2 class="section-title">🔄 Detection Pipeline</h2>
+        <div class="pipeline">
+            <div class="pipeline-step">
+                <div class="step-number">1</div>
+                <div class="step-content glass-card">
+                    <h3>URL Input & Validation</h3>
+                    <p>A user submits a URL via the web interface. The frontend JavaScript sends the URL as a JSON POST
+                        request to the <span class="tag">/predict</span> API endpoint running on the FastAPI backend
+                        server.</p>
+                </div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="pipeline-step">
+                <div class="step-number">2</div>
+                <div class="step-content glass-card">
+                    <h3>Character-Level Tokenization</h3>
+                    <p>The raw URL string is tokenized at the <strong>character level</strong> using a pre-trained <span
+                            class="tag">Keras Tokenizer</span> (saved as <span class="tag">tokenizer.pkl</span>). Every
+                        single character (letters, digits, slashes, dots, etc.) is mapped to a unique integer index from
+                        the vocabulary it learned during training.</p>
+                </div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="pipeline-step">
+                <div class="step-number">3</div>
+                <div class="step-content glass-card">
+                    <h3>Sequence Padding</h3>
+                    <p>The tokenized sequence is padded (or truncated) to a fixed length of <span class="tag">200</span>
+                        characters using <span class="tag">pad_sequences</span>. This ensures all inputs to the neural
+                        network are the same shape, regardless of URL length.</p>
+                </div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="pipeline-step">
+                <div class="step-number">4</div>
+                <div class="step-content glass-card">
+                    <h3>CNN Forward Pass (Inference)</h3>
+                    <p>The padded sequence is passed through the <span class="tag">urlnet_model.h5</span> — a
+                        Convolutional Neural Network. The model detects suspicious character n-gram patterns (like <span
+                            class="tag">login.php</span>, <span class="tag">.xyz</span>, IP-only domains, etc.) and
+                        computes a raw threat probability score between 0 and 1.</p>
+                </div>
+            </div>
+            <div class="step-connector"></div>
+            <div class="pipeline-step">
+                <div class="step-number">5</div>
+                <div class="step-content glass-card">
+                    <h3>Decision & Response</h3>
+                    <p>The model output is interpreted: a score <strong>> 0.5</strong> is classified as <strong
+                            style="color:var(--danger-color)">Defacement / Malicious</strong>. A score <strong>≤
+                            0.5</strong> is classified as <strong style="color:var(--safe-color)">Benign /
+                            Safe</strong>. The result, score, and label are returned as JSON to the frontend where it
+                        renders the animated result card.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Model Architecture -->
+        <h2 class="section-title">🧠 Model Architecture</h2>
+        <div class="model-viz">
+            <h2>URLNet — Conv1D Neural Network</h2>
+            <div class="layer-flow">
+                <div class="layer-box layer-embed">Embedding Layer<br><small>vocab_size × 64 dims — learns character
+                        representations</small></div>
+                <div class="layer-arrow">↓</div>
+                <div class="layer-box layer-conv">Conv1D Layer<br><small>128 filters, kernel_size=3, ReLU — detects
+                        local patterns</small></div>
+                <div class="layer-arrow">↓</div>
+                <div class="layer-box layer-pool">GlobalMaxPooling1D<br><small>Extracts the strongest single feature
+                        from all positions</small></div>
+                <div class="layer-arrow">↓</div>
+                <div class="layer-box layer-dense">Dense Layer<br><small>64 neurons, ReLU — higher level feature
+                        combination</small></div>
+                <div class="layer-arrow">↓</div>
+                <div class="layer-box layer-drop">Dropout Layer<br><small>50% rate — prevents overfitting during
+                        training</small></div>
+                <div class="layer-arrow">↓</div>
+                <div class="layer-box layer-out">Output Layer<br><small>1 neuron, Sigmoid → probability score [0.0 –
+                        1.0]</small></div>
+            </div>
+        </div>
+
+        <!-- Training Details -->
+        <h2 class="section-title">📊 Training Details</h2>
+        <div class="arch-grid">
+            <div class="arch-card glass-card">
+                <h3>📁 Dataset</h3>
+                <p>The model was trained on <span class="tag">benign_vs_defacement_urls.csv</span>, a real-world dataset
+                    containing thousands of labeled URLs — classified as either <strong>benign</strong> (safe) or
+                    <strong>defacement</strong> (malicious website alteration). The dataset was balanced using equal
+                    sampling of each class to prevent bias.</p>
+            </div>
+            <div class="arch-card glass-card">
+                <h3>⚙️ Training Config</h3>
+                <pre>Optimizer  : Adam
+Loss       : Binary Crossentropy
+Epochs     : 5
+Batch Size : 64
+Val Split  : 10%
+Test Split : 20%
+Max URL Len: 200 chars</pre>
+            </div>
+            <div class="arch-card glass-card">
+                <h3>🔤 Tokenization</h3>
+                <p>Tokenization happens at the <strong>character level</strong>, not word level. This means the model
+                    analyzes every single character in the URL. This makes it robust to obfuscation tricks like <span
+                        class="tag">l0gin</span> or unusual TLDs like <span class="tag">.xyz</span> or <span
+                        class="tag">.tk</span>.</p>
+            </div>
+            <div class="arch-card glass-card">
+                <h3>💾 Saved Files</h3>
+                <pre>urlnet_model.h5   → Keras model weights
+tokenizer.pkl     → Fitted character tokenizer</pre>
+                <p style="margin-top:0.75rem;">Loaded once at server startup for fast inference on every request without
+                    reloading.</p>
+            </div>
+        </div>
+
+        <!-- Web Stack -->
+        <h2 class="section-title">🌐 Web Stack</h2>
+        <div class="arch-grid">
+            <div class="arch-card glass-card">
+                <h3>⚡ Backend</h3>
+                <pre>Framework : FastAPI (Python)
+Server    : Uvicorn (ASGI)
+ML Libs   : TensorFlow / Keras
+Serializer: Pickle (tokenizer)
+Port      : 8000</pre>
+            </div>
+            <div class="arch-card glass-card">
+                <h3>🎨 Frontend</h3>
+                <pre>HTML5     : Semantic structure
+CSS3      : Glassmorphism design
+JavaScript: Async fetch API
+Fonts     : Outfit + Inter
+           + JetBrains Mono</pre>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
