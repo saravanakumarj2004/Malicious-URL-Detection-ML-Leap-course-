@@ -29,7 +29,10 @@ body {
 /* Background Animated Blobs */
 .background-effects {
     position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     z-index: -1;
     overflow: hidden;
     filter: blur(100px);
@@ -42,19 +45,49 @@ body {
     animation: float 20s infinite ease-in-out alternate;
 }
 
-.blob-1 { width: 500px; height: 500px; background: #4f46e5; top: -100px; left: -100px; }
-.blob-2 { width: 400px; height: 400px; background: #8b5cf6; bottom: -50px; right: -50px; animation-delay: -5s; }
-.blob-3 { width: 600px; height: 600px; background: #06b6d4; top: 40%; left: 50%; transform: translate(-50%, -50%); opacity: 0.2; animation-duration: 25s; }
+.blob-1 {
+    width: 500px;
+    height: 500px;
+    background: #4f46e5;
+    top: -100px;
+    left: -100px;
+}
+
+.blob-2 {
+    width: 400px;
+    height: 400px;
+    background: #8b5cf6;
+    bottom: -50px;
+    right: -50px;
+    animation-delay: -5s;
+}
+
+.blob-3 {
+    width: 600px;
+    height: 600px;
+    background: #06b6d4;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.2;
+    animation-duration: 25s;
+}
 
 @keyframes float {
-    0% { transform: translateY(0) scale(1); }
-    100% { transform: translateY(-50px) scale(1.1); }
+    0% {
+        transform: translateY(0) scale(1);
+    }
+
+    100% {
+        transform: translateY(-50px) scale(1.1);
+    }
 }
 
 /* Glassmorphism Navigation */
 .glass-nav {
     position: fixed;
-    top: 0; width: 100%;
+    top: 0;
+    width: 100%;
     padding: 1.2rem 4rem;
     display: flex;
     justify-content: space-between;
@@ -89,7 +122,8 @@ body {
     transition: color 0.3s;
 }
 
-.nav-item:hover, .nav-item.active {
+.nav-item:hover,
+.nav-item.active {
     color: var(--text-main);
 }
 
@@ -118,8 +152,15 @@ body {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .glass-card {
@@ -182,6 +223,7 @@ body {
 .text-gradient {
     background: linear-gradient(135deg, #818cf8, #c084fc);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -318,10 +360,16 @@ body {
     animation: spin 1s linear infinite;
 }
 
-@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
 
 /* Results */
-.hidden { display: none !important; }
+.hidden {
+    display: none !important;
+}
 
 .result-container {
     animation: fadeIn 0.4s ease-out;
@@ -400,10 +448,12 @@ body {
 .status-safe {
     border-left-color: var(--safe-color);
 }
+
 .status-safe .result-icon-container {
     background: rgba(16, 185, 129, 0.1);
     color: var(--safe-color);
 }
+
 .status-safe .meter-fill {
     background: var(--safe-color);
     box-shadow: 0 0 10px var(--safe-color);
@@ -412,10 +462,12 @@ body {
 .status-danger {
     border-left-color: var(--danger-color);
 }
+
 .status-danger .result-icon-container {
     background: rgba(239, 68, 68, 0.1);
     color: var(--danger-color);
 }
+
 .status-danger .meter-fill {
     background: var(--danger-color);
     box-shadow: 0 0 10px var(--danger-color);
